@@ -1,34 +1,46 @@
 const path = require('path');
 const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = {
-    mode: "development",
+    plugins: [
+        new webpack.ProvidePlugin({
+            $: 'jquery'
+        }),
+        new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // both options are optional
+            filename: '[name].css',
+            chunkFilename: '[id].css',
+        }),
+    ],
+    mode: devMode ? "development" : 'production',
     devtool: 'inline-source-map',
     context: path.resolve(__dirname, 'src/web'),
     module: {
         rules: [
             {
-                test: /\.scss$/,
+                test: /\.(sa|sc|c)ss$/,
                 use: [
                     {
-                        loader: 'file-loader',
+                        loader: MiniCssExtractPlugin.loader,
                         options: {
-                            name: '[name].css',
+                            hmr: process.env.NODE_ENV === 'development',
+                        },
+                    },
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: { sourceMap: true }
+                    },
+                    {
+                        loader: 'sass-loader', options: {
+                            sourceMap: true,
+                            outputStyle: 'compressed'
                         }
                     },
-                    {
-                        loader: 'extract-loader'
-                    },
-                    {
-                        loader: 'css-loader?-url'
-                    },
-                    {
-                        loader: 'postcss-loader'
-                    },
-                    {
-                        loader: 'sass-loader'
-                    }
-                ]
+                ],
             },
             { test: /\.ts$/, use: 'ts-loader', exclude: /node_modules/ },
             {
@@ -48,9 +60,7 @@ module.exports = {
     entry: {
         index: ['./index.ts', './index.scss', './index.html'],
     },
-    plugins: [
-        new webpack.ProvidePlugin({
-            $: 'jquery'
-        })
-    ],
+    resolve: {
+        extensions: [ '.ts', '.html', '.scss', '.png', '.jpeg', '.jpg', '.json' ]
+    }
 };

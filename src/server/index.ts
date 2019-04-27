@@ -18,6 +18,6 @@ app.get('/index.css', (req, res)=>{
     res.sendFile(path.join(__dirname, '../web/index.css'))
 })
 
-app.listen(8080, ()=>{
+app.listen(8080, () => {
     console.log('Listening on *:8080')
 })
