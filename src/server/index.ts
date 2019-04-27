@@ -1,5 +1,5 @@
 require('source-map-support').install();
-console.log('index.ts')
+console.log('Started index.ts')
 
 import * as express from 'express'
 import * as path from 'path'
@@ -18,4 +18,6 @@ app.get('/index.css', (req, res)=>{
     res.sendFile(path.join(__dirname, '../web/index.css'))
 })
 
-app.listen(8080)
+app.listen(8080, ()=>{
+    console.log('Listening on *:8080')
+})
