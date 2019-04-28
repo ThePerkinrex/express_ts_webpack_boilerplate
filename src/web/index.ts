@@ -1,4 +1,5 @@
 import {greet} from './utils'
+import * as jscolor from './jscolor.js'
 
 console.log('HOLA JQUERY')
 $('b').text('JQUERY')
