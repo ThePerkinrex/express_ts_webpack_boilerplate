@@ -2,8 +2,9 @@ const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const devMode = process.env.NODE_ENV !== 'production';
+const fs = require('fs');
 
-module.exports = {
+let config = {
     plugins: [
         new webpack.ProvidePlugin({
             $: 'jquery'
@@ -64,3 +65,15 @@ module.exports = {
         extensions: [ '.ts', '.html', '.scss', '.png', '.jpeg', '.jpg', '.json' ]
     }
 };
+
+// Add themes
+let files = fs.readdirSync(config.context + '/themes/')
+let themeEntry = []
+for (let file of files){
+    if(file.endsWith('.scss')) {
+        themeEntry.push('./themes/'+file)
+    }
+}
+config.entry.themes = themeEntry;
+
+module.exports = config;
